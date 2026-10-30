@@ -1195,17 +1195,20 @@ const store = {
   get(k){ try{ const v = JSON.parse(localStorage.getItem(k)); if(v && Date.now() - v.t < CACHE_HOURS*3600e3) return v.d; }catch(e){} return null; },
   set(k,d){ try{ localStorage.setItem(k, JSON.stringify({t:Date.now(), d})); }catch(e){} }
 };
-async function getJSON(url, opts){
-  const r = await fetch(url, opts);
-  if(!r.ok) throw new Error(r.status + " " + url);
-  return r.json();
+async function getJSON(url, opts = {}, ms = 25000){
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), ms);
+  try{
+    const r = await fetch(url, {...opts, signal: ctl.signal});
+    if(!r.ok) throw new Error(r.status + " " + url);
+    return await r.json();
+  } finally { clearTimeout(timer); }
 }
 async function overpass(qry, key){
   const hit = store.get(key); if(hit) return hit;
   let lastErr;
   for(const ep of OVERPASS){
     try{
-      const d = await getJSON(ep, {method:"POST", body:"data="+encodeURIComponent(qry), headers:{"Content-Type":"application/x-www-form-urlencoded"}});
+      const d = await getJSON(ep, {method:"POST", body:"data="+encodeURIComponent(qry), headers:{"Content-Type":"application/x-www-form-urlencoded"}}, 40000);
       store.set(key, d); return d;
     }catch(e){ lastErr = e; }
   }
@@ -1563,13 +1566,24 @@ async function loadAll(){
    nwr["amenity"="hospital"]["emergency"="yes"](area.h);
    node["amenity"="drinking_water"](area.h););
   out center tags;`;
-  const [osmR, acc, lic, loos, fount] = await Promise.all([
-    overpass(osmQ, "an-osm-v2").then(d => d.elements, e => { console.warn(e); return null; }),
+  const osmP = overpass(osmQ, "an-osm-v2").then(d => d.elements, e => { console.warn("OpenStreetMap details unavailable", e); return null; });
+  const councilData = await Promise.all([
     council("amenities:hackney_nights_accredited_venues", {props:"mauref,premises_name,premises_address,toilet_use_to_public,geom"}),
     council("licensing:licensing_act_2003_premises", {props:LIC_PROPS, cql:LIC_CQL}),
     council("amenities:public_toilet"),
     council("amenities:drinking_fountain_combined", {props:"name,location,type,geom"})
   ]);
+  buildLayers(null, ...councilData, true);          // council venues straight away
+  osmP.then(osmR => {
+    if(osmR){
+      buildLayers(osmR, ...councilData, false);       // redraw with opening hours, step-free info etc.
+      if(pharmLoaded){ layers.pharmacy.clearLayers(); pharmLoaded = false; loadPharmacies(); }
+    } else setStatus(statusEl.textContent.replace(" Adding opening hours and access details…", "") + " (Extra details from OpenStreetMap unavailable right now.)");
+  });
+}
+
+function buildLayers(osmR, acc, lic, loos, fount, pending){
+  for(const k of ["toilets","water","emergency","food","shops"]) layers[k].clearLayers();
 
   // OSM split
   const osm = {venues:[], toilets:[], water:[], pharmacy:[], police:[], hospital:[]};
@@ -1692,7 +1706,7 @@ async function loadAll(){
 
   // Help: pharmacies (council list, opening hours from OSM where mapped)
   helpData.osmPharm = osm.pharmacy;
-  if(osmR === null) setStatus(statusEl.textContent + " (Extra details from OpenStreetMap unavailable right now.)");
+  if(pending) setStatus(statusEl.textContent + " Adding opening hours and access details…");
 }
 
 const helpData = {};
