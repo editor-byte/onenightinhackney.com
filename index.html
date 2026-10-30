@@ -803,15 +803,17 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
 .byline{font-size:12px;color:var(--muted)}
 .byline a{color:var(--link)}
 /* linocut */
-[data-theme="linocut"] .brand{font-size:46px;text-transform:uppercase;transform:rotate(-9deg);transform-origin:left center;border-top:4px solid var(--ink);border-bottom:4px solid var(--ink);padding:6px 0;
-  text-shadow:0 0 10px var(--halo),0 0 4px var(--halo)}
-[data-theme="linocut"] .brand .b2{margin-left:46px}
-[data-theme="linocut"] .byline{margin-top:18px;text-shadow:0 0 6px var(--halo),0 0 3px var(--halo)}
+[data-theme="linocut"] header,[data-theme="risograph"] header{left:50%;top:16px;transform:translateX(-50%);padding:10px 24px 9px;gap:3px;align-items:center;
+  background:var(--panel);border:var(--panel-border);box-shadow:var(--panel-shadow);pointer-events:auto}
+[data-theme="linocut"] .brand,[data-theme="risograph"] .brand{flex-direction:row;gap:.35em;white-space:nowrap}
+[data-theme="linocut"] .brand{font-size:32px;text-transform:uppercase;letter-spacing:1px}
+[data-theme="linocut"] .brand .b2{color:#f0705a}
+[data-theme="linocut"] .byline,[data-theme="risograph"] .byline{margin:0;font-size:12px;letter-spacing:1px}
 /* risograph */
-[data-theme="risograph"] .brand{font-size:32px;text-transform:uppercase;letter-spacing:-1px;color:#ff4fa3;transform:rotate(-9deg);transform-origin:left center;
-  text-shadow:4px 3px 0 #ffe14a;border-top:5px solid #ffe14a;border-bottom:5px solid #ffe14a;padding:8px 0}
-[data-theme="risograph"] .brand .b2{margin-left:46px}
-[data-theme="risograph"] .byline{margin-top:18px;background:var(--panel);padding:2px 6px}
+[data-theme="risograph"] .brand{font-size:22px;text-transform:uppercase;letter-spacing:-.5px;color:#ff4fa3;text-shadow:3px 2px 0 #ffe14a}
+@media (min-width:701px) and (max-width:1120px){
+  [data-theme="linocut"] header,[data-theme="risograph"] header{left:24px;transform:none}
+}
 /* pen & ink */
 [data-theme="ink"] header{right:0;padding:14px 24px 0;background:var(--panel);border-bottom:3px double var(--ink);box-shadow:0 1px 0 var(--ink)}
 [data-theme="ink"] .brand{flex-direction:row;gap:12px;align-items:baseline;font-size:40px;font-weight:900;letter-spacing:-1px}
@@ -875,6 +877,14 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
 .routes button[aria-pressed="true"]{background:var(--c);color:var(--panel)}
 [data-theme="access"] .routes button[aria-pressed="true"]{color:#14182b;text-decoration:underline}
 .routes button.failed{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.explain{margin:0 0 6px 24px;font-size:.82em;color:var(--muted);line-height:1.4}
+.explain summary{cursor:pointer;color:var(--link);text-decoration:underline;text-underline-offset:3px;min-height:26px;display:inline-flex;align-items:center;list-style:none}
+.explain summary::-webkit-details-marker{display:none}
+[data-theme="access"] .explain summary{min-height:44px;color:var(--ink)}
+.explain p{margin:4px 0}
+.explain ul{margin:4px 0;padding-left:18px}
+.explain li{margin:2px 0}
+.explain a{color:var(--link)}
 .note{font-size:.82em;color:var(--muted);padding:2px 0 6px 24px}
 .status{font-size:.82em;color:var(--muted);margin-top:6px;border-top:1px solid var(--rule);padding-top:6px}
 .status.err{color:var(--closed)}
@@ -971,8 +981,10 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
 /* ----- mobile ----- */
 @media (max-width:700px){
   header{padding:14px 16px}
-  [data-theme="linocut"] .brand{font-size:30px}
-  [data-theme="risograph"] .brand{font-size:21px}
+  [data-theme="linocut"] header,[data-theme="risograph"] header{left:12px;right:12px;top:12px;transform:none;padding:8px 12px}
+  [data-theme="linocut"] .brand{font-size:21px}
+  [data-theme="risograph"] .brand{font-size:14px}
+  [data-theme="linocut"] #styles,[data-theme="risograph"] #styles{top:74px}
   [data-theme="ink"] header{right:0;padding:10px 16px 0}
   [data-theme="ink"] .brand{font-size:28px}
   [data-theme="access"] .brand{font-size:21px}
@@ -1076,6 +1088,17 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
       <button type="button" class="chev down" data-target="g-venues" aria-expanded="true" aria-label="Venue filters">›</button></label>
     <div class="group" id="g-venues">
       <label class="row sub"><input type="checkbox" id="f-v-acc" checked><span class="ico"><span class="badge b-acc in-key"><i class="ic" data-ico="check"></i></span></span><span class="lbl">Hackney Nights accredited</span></label>
+      <details class="explain">
+        <summary>What does &lsquo;accredited&rsquo; mean?</summary>
+        <p>Hackney Nights is Hackney Council&rsquo;s night-time safety scheme. Accredited venues have signed up to its standards, including:</p>
+        <ul>
+          <li>staff trained in customer welfare, spotting vulnerability and drink spiking</li>
+          <li>&lsquo;Ask for Angela&rsquo;: if you feel unsafe, ask the bar staff for &lsquo;Angela&rsquo; and they will help you discreetly</li>
+          <li>zero tolerance of harassment, violence against women and hate</li>
+        </ul>
+        <p>It&rsquo;s a council safety standard, not a review. Venues without it aren&rsquo;t necessarily unsafe.</p>
+        <p><a href="https://hackney.gov.uk/hackney-nights/" target="_blank" rel="noopener">More about Hackney Nights<span class="sr"> (opens in a new tab)</span></a></p>
+      </details>
       <label class="row sub"><input type="checkbox" id="f-v-other"><span class="ico"><span class="mini-star" aria-hidden="true"><i class="ic" data-ico="star"></i></span></span><span class="lbl">Other pubs, bars &amp; clubs</span></label>
       <div class="note" style="padding-top:4px">Only show venues with:</div>
       <label class="row sub"><input type="checkbox" id="f-v-wc"><span class="ico"><span class="badge b-wc in-key">WC</span></span><span class="lbl">Toilets for public</span></label>
@@ -1510,7 +1533,7 @@ function venuePopup(v){
   const osm = v.osm ? `https://www.openstreetmap.org/${v.osm.type}/${v.osm.id}` : `https://www.openstreetmap.org/note/new#map=19/${v.lat}/${v.lon}`;
   const kind = v.lic ? (LIC_KIND[v.lic.cat] || "Venue") : (KIND[t.amenity] || "Venue");
   return `<div class="pp">
-    ${v.acc ? `<div class="acc" title="Accredited under Hackney Council's Hackney Nights scheme">${ic("check")} Hackney Nights accredited</div>` : `<div class="kind">${esc(kind)}</div>`}
+    ${v.acc ? `<div class="acc" title="Accredited under Hackney Council's Hackney Nights safety scheme: staff trained in welfare, vulnerability, drink spiking and Ask for Angela">${ic("check")} Hackney Nights accredited</div>` : `<div class="kind">${esc(kind)}</div>`}
     <h3>${esc(v.name)}</h3>
     ${v.addr ? `<div class="addr">${esc(v.addr)}</div>` : ""}
     ${feats.length ? `<div class="feats">${feats.join("")}</div>` : ""}
