@@ -1005,6 +1005,46 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
 }
 
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* ----- accessible view on a light background ----- */
+[data-theme="access"][data-tone="light"]{
+  --bg:#ffffff; --panel:#ffffff; --ink:#111111; --muted:#454545; --rule:#11111140; --head:#000000;
+  --accent:#111111; --accent2:#0b5cad; --link:#0b5cad; --check:#111111;
+  --panel-border:2px solid #111111; --panel-shadow:0 2px 10px rgba(0,0,0,.18);
+  --halo:#ffffff;
+  --pin-body:#ffbf47; --pin-stroke:#111111; --pin-star:#111111;
+  --pin2-body:#ffffff; --pin2-stroke:#111111; --pin2-star:#111111;
+  --dot-border:#ffffff;
+  --c-wc:#0b5cad;   --t-wc:#ffffff;
+  --c-water:#00677a;--t-water:#ffffff;
+  --c-wheel:#0b5cad;--t-wheel:#ffffff;
+  --c-late:#4b2a85; --t-late:#ffffff;
+  --c-acc:#111111;  --t-acc:#ffffff;
+  --c-pharm:#00703c;--t-pharm:#ffffff;
+  --c-ae:#c40000;   --t-ae:#ffffff;
+  --c-police:#1d3557;--t-police:#ffffff;
+  --c-food:#9c4400; --t-food:#ffffff;
+  --c-shop:#6a3d9a; --t-shop:#ffffff;
+  --c-live:#111111; --t-live:#ffffff;
+  --c-dance:#4b2a85;--t-dance:#ffffff;
+  --c-sexual:#9b0d55;--t-sexual:#ffffff;
+  --open:#00703c; --closed:#b00020;
+  --focus:#111111;
+}
+[data-theme="access"][data-tone="light"] :focus-visible{outline:3px solid #111;outline-offset:3px;box-shadow:0 0 0 6px #ffbf47}
+[data-theme="access"][data-tone="light"] .dot{box-shadow:0 0 0 1.5px #111}
+[data-theme="access"][data-tone="light"] .npin{border-color:#111;box-shadow:0 0 0 2px #fff}
+[data-theme="access"][data-tone="light"] .npin.other{background:#fff;color:#111;border-color:#111;box-shadow:0 0 0 2px #fff}
+[data-theme="access"][data-tone="light"] .npin.sel{background:#111;color:#fff;box-shadow:0 0 0 5px #ffbf47}
+[data-theme="access"][data-tone="light"] #vlist .num{border-color:#111}
+[data-theme="access"][data-tone="light"] #vlist .num.other{background:#fff;color:#111;border-color:#111}
+[data-theme="access"][data-tone="light"] #vlist li button[aria-current="true"]{background:#ffbf47;color:#111;border-color:#111}
+[data-theme="access"][data-tone="light"] #vdetail{background:#f4f4f4}
+[data-theme="access"][data-tone="light"] .routes button[aria-pressed="true"]{color:#fff}
+#toneBtn{display:none}
+[data-theme="access"] #toneBtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;background:var(--bg);color:var(--ink);border:2px solid var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer;pointer-events:auto}
+[data-theme="access"] #toneBtn .ic{width:18px;height:18px}
+@media (max-width:700px){ [data-theme="access"] #toneBtn{min-height:40px;padding:0 10px;font-size:13px} }
+
 /* ----- accessible view: numbered pins + venue list ----- */
 .npin{display:none}
 [data-theme="access"] .pin{display:none}
@@ -1062,6 +1102,7 @@ header{position:fixed;top:0;left:0;z-index:1000;padding:22px 24px;pointer-events
   <a class="skip" href="#vlist">Skip to venue list</a>
   <div class="brand"><span class="b1">One Night</span> <span class="b2">in Hackney</span></div>
   <div class="byline"><a href="https://onenightinhackney.com/">onenightinhackney.com</a></div>
+  <button type="button" id="toneBtn" aria-pressed="false"><i class="ic" data-ico="contrast"></i> <span class="t-label">Dark background</span></button>
 </header>
 
 <div id="styles" role="group" aria-label="Map style">
@@ -1194,6 +1235,7 @@ const ICONS = {
   bike:'<svg viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.5" cy="11" r="2.8"/><circle cx="12.5" cy="11" r="2.8"/><path d="M3.5 11l3-6h4.5l1.5 6M6.5 5L9 11h3.5M5.6 3.5h2"/></g></svg>',
   help:'<svg viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="6.3"/><circle cx="8" cy="8" r="2.6"/><path d="M3.6 3.6l2.6 2.6M12.4 3.6L9.8 6.2M3.6 12.4l2.6-2.6M12.4 12.4L9.8 9.8"/></g></svg>',
   clock:'<svg viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="8" r="6.3"/><path d="M8 4.2V8l2.6 1.6"/></g></svg>',
+  contrast:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="currentColor" d="M8 1.7a6.3 6.3 0 0 1 0 12.6z"/></svg>',
   note:'<svg viewBox="0 0 16 16"><path fill="currentColor" d="M6 2.5l7-1.5v9.2a2.2 2.2 0 1 1-1.5-2.1V4L7.5 4.9v6.8A2.2 2.2 0 1 1 6 9.6z"/></svg>'
 };
 const ic = name => `<i class="ic" aria-hidden="true">${ICONS[name]}</i>`;
@@ -1210,8 +1252,16 @@ const THEMES = {
   access:   {label:"Accessible",meta:"#14182b", halo:"#14182b",
     base:{bg:"#14182b", water:"#1f3a66", park:"#27443a", building:"#1b2038", minor:"#9aa0b8", major:"#f2ede1", rail:"#b9bccb", label:"#ffffff", halo:"#14182b", font:"Noto Sans Bold", big:true}, routes:["#56b4e9","#e69f00","#f0e442","#5ed1a5","#cc79a7","#ffffff","#ff8a5c"], cycleNet:"#8db4ef", cycleSup:"#ffbf47"}
 };
+// Accessible view on a light background (used when the visitor's device is in light mode, or they choose it)
+const ACCESS_LIGHT = {label:"Accessible", meta:"#ffffff", halo:"#ffffff",
+  base:{bg:"#ffffff", water:"#a9cbe8", park:"#cfe5cf", building:"#ececec", minor:"#9aa1ad", major:"#2b303b", rail:"#5a5f6b", label:"#111111", halo:"#ffffff", font:"Noto Sans Bold", big:true},
+  routes:["#0072b2","#d55e00","#009e73","#cc79a7","#7a5200","#000000","#6a3d9a"], cycleNet:"#0072b2", cycleSup:"#d55e00"};
+let storedTone = null;
+try{ storedTone = localStorage.getItem("an-tone"); }catch(e){}
+const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+const tone = () => storedTone || (darkQuery.matches ? "dark" : "light");
 let theme = "linocut";
-const T = () => THEMES[theme];
+const T = () => (theme === "access" && tone() === "light") ? ACCESS_LIGHT : THEMES[theme];
 
 const setStatus = (t, err) => { statusEl.textContent = t; statusEl.classList.toggle("err", !!err); };
 const store = {
@@ -1926,6 +1976,10 @@ function setTheme(id, save){
   if(!THEMES[id]) id = "linocut";
   theme = id;
   document.documentElement.dataset.theme = id;
+  document.documentElement.dataset.tone = tone();
+  const tb = $("#toneBtn");
+  tb.setAttribute("aria-pressed", tone() === "dark");
+  tb.querySelector(".t-label").textContent = tone() === "dark" ? "Light background" : "Dark background";
   document.querySelector('meta[name="theme-color"]').content = T().meta;
   restyleBase();
   document.querySelectorAll("[data-theme-btn]").forEach(b => b.setAttribute("aria-pressed", b.dataset.themeBtn === id));
@@ -1941,6 +1995,13 @@ function setTheme(id, save){
   if(save){ try{ localStorage.setItem("an-style", id); }catch(e){} }
 }
 document.querySelectorAll("[data-theme-btn]").forEach(b => b.addEventListener("click", () => setTheme(b.dataset.themeBtn, true)));
+$("#toneBtn").addEventListener("click", () => {
+  storedTone = tone() === "dark" ? "light" : "dark";
+  try{ localStorage.setItem("an-tone", storedTone); }catch(e){}
+  setTheme(theme, false);
+});
+// follow the device's light/dark setting unless the visitor has chosen
+darkQuery.addEventListener && darkQuery.addEventListener("change", () => { if(!storedTone) setTheme(theme, false); });
 $("#vlistToggle").addEventListener("click", () => {
   const v = $("#vlist"), open = v.classList.toggle("closed") === false;
   $("#vlistToggle").setAttribute("aria-expanded", open); $("#vlistToggle").textContent = open ? "Hide list" : "Show list";
